@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-stone text-noir font-body antialiased;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  h1, h2, h3, h4 { @apply font-display font-normal; line-height: 1.15; letter-spacing: 0.005em; }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid #4F6E66; outline-offset: 3px; }
+  ::selection { background: #2C3434; color: #F3F4F2; }
+}
+
+@layer components {
+  .page { @apply mx-auto w-full max-w-page px-5 sm:px-8; }
+  .measure { max-width: 62ch; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-noir px-6 py-3 text-[15px] font-medium text-stone transition-colors;
+  }
+  .btn:hover { background: #1E2424; }
+  .btn-light { @apply bg-stone text-noir; }
+  .btn-light:hover { background: #fff; }
+  .btn-line {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-current px-6 py-3 text-[15px] font-medium transition-colors;
+  }
+  .btn-line:hover { background: rgba(127, 127, 127, 0.12); }
+
+  .link { @apply text-verd underline decoration-1 underline-offset-4; }
+  .link:hover { @apply text-noir; }
+
+  .field-label { @apply mb-1.5 block text-sm font-medium text-noir; }
+  .field {
+    @apply w-full rounded-lg border border-mist bg-white px-4 py-3 text-[15px] text-noir placeholder:text-vein transition-colors;
+  }
+  .field:focus { outline: none; border-color: #4F6E66; box-shadow: 0 0 0 3px rgba(79, 110, 102, 0.18); }
+
+  .chip {
+    @apply rounded-full border border-mist bg-white px-4 py-2 text-sm text-noir transition-colors;
+  }
+  .chip[aria-pressed='true'] { @apply border-noir bg-noir text-stone; }
+
+  /* a slab photo with a soft polished sheen */
+  .slab { @apply relative overflow-hidden bg-mist; }
+  .slab img { @apply h-full w-full object-cover transition-transform duration-700; }
+  .slab::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(125deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 38%);
+  }
+  a:hover .slab img, a:focus-visible .slab img { transform: scale(1.04); }
+}
+
+/* hero: a sheen of light that follows the pointer across the polished slab */
+.hero-sheen {
+  background: radial-gradient(520px circle at var(--mx, 70%) var(--my, 30%), rgba(255,255,255,0.13), transparent 60%);
+  transition: background 0.2s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+.hero-in > * { animation: rise 0.9s cubic-bezier(.2,.7,.2,1) both; }
+.hero-in > *:nth-child(2) { animation-delay: 0.12s; }
+.hero-in > *:nth-child(3) { animation-delay: 0.24s; }
+.hero-in > *:nth-child(4) { animation-delay: 0.36s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+select.field {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238C9592' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
