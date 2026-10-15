@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import Brand from './Brand'
 import { useT, useLang } from '../i18n'
-import { MATERIALS, APPLICATIONS } from '../config'
+import { COLLECTIONS, APPLICATIONS } from '../config'
 
 function Dropdown({ label, to, items }) {
   return (
@@ -27,7 +27,7 @@ export default function Navbar() {
   const { pathname } = useLocation()
   useEffect(() => setOpen(false), [pathname])
 
-  const productItems = [{ to: '/urunler', label: t('nav.allProducts') }, ...MATERIALS.map((m) => ({ to: `/urunler/${m}`, label: t(`mat.${m}`) }))]
+  const productItems = [{ to: '/urunler', label: t('nav.allProducts') }, ...COLLECTIONS.map(({ key }) => ({ to: `/urunler/${key}`, label: t(`col.${key}`) }))]
   const appItems = [{ to: '/uygulamalar', label: t('nav.allApps') }, ...APPLICATIONS.map((a) => ({ to: `/uygulamalar/${a}`, label: t(`app.${a}`) }))]
   const simple = [['/hakkimizda', 'nav.about'], ['/blog', 'nav.blog'], ['/iletisim', 'nav.contact']]
   const langBtn = (
@@ -67,7 +67,7 @@ export default function Navbar() {
             <div>
               <Link to="/urunler" className="block font-display text-2xl">{t('nav.products')}</Link>
               <div className="mt-2 flex flex-wrap gap-2">
-                {MATERIALS.map((m) => <Link key={m} to={`/urunler/${m}`} className="chip">{t(`mat.${m}`)}</Link>)}
+                {COLLECTIONS.map(({ key }) => <Link key={key} to={`/urunler/${key}`} className="chip">{t(`col.${key}`)}</Link>)}
               </div>
             </div>
             <div>

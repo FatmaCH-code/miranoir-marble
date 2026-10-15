@@ -42,7 +42,7 @@ export default function StonesPanel() {
                     <div className="font-medium">{s.name} {!s.active && <span className="ml-1 rounded bg-mist px-2 py-0.5 text-xs text-vein">{t('admin.hidden')}</span>}</div>
                     <div className="text-sm text-vein">/{s.slug}</div>
                   </td>
-                  <td className="p-3">{t(`mat.${s.material}`)}</td>
+                  <td className="p-3">{s.collection ? t(`col.${s.collection}`) : t(`mat.${s.material}`)}</td>
                   <td className="p-3 text-vein">{s.brand}</td>
                   <td className="p-3">{s.featured ? '✦' : ''}</td>
                   <td className="p-3 text-right">

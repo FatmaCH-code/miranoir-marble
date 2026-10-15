@@ -18,7 +18,7 @@ export default function About() {
           <Link to="/iletisim" className="btn mt-10">{t('nav.quote')}</Link>
         </div>
         <div className="slab aspect-[4/5] rounded-t-full">
-          <img src="/stones/nero-marquina.jpg" alt="Nero Marquina" />
+          <img src="/projects2/about-bar.jpg" alt="" />
         </div>
       </section>
       <section className="bg-white py-20">

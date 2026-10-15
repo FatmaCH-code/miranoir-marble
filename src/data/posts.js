@@ -3,7 +3,7 @@ export const posts = [
   {
     slug: 'kuvars-mi-porselen-mi',
     date: '2026-09-18',
-    cover: '/stones/quartz-calacatta.jpg',
+    cover: '/catalog/coante-calacatta-miranda.jpg',
     title: { tr: 'Kuvars mı, porselen mi?', en: 'Quartz or porcelain?' },
     excerpt: {
       tr: 'İki popüler tezgah malzemesini ısı, çizilme ve bakım açısından karşılaştırdık.',
@@ -25,7 +25,7 @@ export const posts = [
   {
     slug: 'mermer-tezgah-bakimi',
     date: '2026-08-30',
-    cover: '/stones/statuario-venato.jpg',
+    cover: '/catalog/statuario.jpg',
     title: { tr: 'Mermer tezgah bakımı: 5 kural', en: 'Caring for marble countertops: 5 rules' },
     excerpt: {
       tr: 'Mermeriniz yıllarca ilk günkü gibi kalsın diye uyguladığımız basit alışkanlıklar.',
@@ -51,7 +51,7 @@ export const posts = [
   {
     slug: 'tezgah-olcusu-nasil-alinir',
     date: '2026-07-12',
-    cover: '/stones/carrara-bianco.jpg',
+    cover: '/projects2/kitchen-arabescato.jpg',
     title: { tr: 'Teklif için tezgah ölçüsü nasıl alınır?', en: 'How to measure your countertop for a quote' },
     excerpt: {
       tr: 'Doğru bir fiyat için yeterli olan yaklaşık ölçüyü üç adımda alın.',

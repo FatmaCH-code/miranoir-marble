@@ -9,7 +9,8 @@ create table if not exists stones (
   id bigint primary key generated always as identity,
   slug text unique not null,
   name text not null,
-  material text not null check (material in ('mermer','granit','kuvars','porselen')),
+  collection text default '',
+  material text not null,
   brand text default '',
   tone text default 'light' check (tone in ('light','dark','warm')),
   finish text default '',
@@ -21,6 +22,12 @@ create table if not exists stones (
   active boolean default true,
   created_at timestamptz default now()
 );
+
+-- upgrade an older version of this table (safe if already up to date)
+alter table stones add column if not exists collection text default '';
+alter table stones drop constraint if exists stones_material_check;
+alter table stones add constraint stones_material_check check (material in ('mermer','oniks','kuvars','porselen'));
+create index if not exists stones_collection_idx on stones (collection);
 
 -- QUOTE REQUESTS ---------------------------------------------------------------
 create table if not exists quotes (

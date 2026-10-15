@@ -7,7 +7,7 @@ export default function TopBar() {
     <div className="bg-slab text-[13px] text-stone/80">
       <div className="page flex h-10 items-center justify-between gap-4">
         <div className="flex items-center gap-5 overflow-hidden whitespace-nowrap">
-          <span className="hidden items-center gap-1.5 md:flex"><MapPin className="h-3.5 w-3.5" />{COMPANY.city}</span>
+          <span className="hidden items-center gap-1.5 md:flex"><MapPin className="h-3.5 w-3.5" />{COMPANY.area}</span>
           {COMPANY.phones.map((p, i) => (
             <a key={p} href={telHref(p)} className={`items-center gap-1.5 hover:text-white ${i ? 'hidden sm:flex' : 'flex'}`}>
               <Phone className="h-3.5 w-3.5" />{p}

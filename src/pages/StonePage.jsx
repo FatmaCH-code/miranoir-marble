@@ -23,23 +23,22 @@ export default function StonePage() {
     </div>
   )
 
-  const related = stones.filter((s) => s.id !== stone.id && (s.material === stone.material || s.tone === stone.tone))
-    .sort((a, b) => (b.material === stone.material) - (a.material === stone.material)).slice(0, 4)
+  const related = stones.filter((s) => s.id !== stone.id && s.collection === stone.collection).slice(0, 4)
   const specs = [
-    ['stone.material', t(`mat.${stone.material}`)], ['stone.brand', stone.brand],
-    ['stone.finish', stone.finish], ['stone.thickness', stone.thickness], ['stone.tone', t(`tone.${stone.tone}`)],
+    ['stone.collection', stone.collection ? t(`col.${stone.collection}`) : ''], ['stone.material', t(`mat.${stone.material}`)],
+    ['stone.brand', stone.brand], ['stone.finish', stone.finish], ['stone.thickness', stone.thickness],
   ].filter(([, v]) => v)
 
   return (
     <>
       <section className="page py-10">
-        <Link to={`/urunler/${stone.material}`} className="inline-flex items-center gap-2 text-sm text-vein hover:text-noir">
+        <Link to={`/urunler/${stone.collection || ''}`} className="inline-flex items-center gap-2 text-sm text-vein hover:text-noir">
           <ArrowLeft className="h-4 w-4" />{t('stone.back')}
         </Link>
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <div>
-            <div className="slab aspect-square rounded-sm">
-              <img src={stone.images[active] || stone.images[0]} alt={stone.name} />
+            <div className="slab rounded-sm">
+              <img src={stone.images[active] || stone.images[0]} alt={stone.name} className="max-h-[75vh]" />
             </div>
             {stone.images.length > 1 && (
               <div className="mt-3 flex gap-3">
@@ -53,9 +52,9 @@ export default function StonePage() {
             )}
           </div>
           <div className="lg:pt-6">
-            <p className="text-vein">{t(`mat.${stone.material}`)}</p>
+            <p className="text-vein">{stone.collection ? t(`col.${stone.collection}`) : t(`mat.${stone.material}`)}</p>
             <h1 className="mt-1 text-5xl">{stone.name}</h1>
-            <p className="measure mt-6 text-[17px] text-noir/80">{t.pick(stone.description)}</p>
+            <p className="measure mt-6 text-[17px] text-noir/80">{t.pick(stone.description) || (stone.collection ? t(`cold.${stone.collection}`) : '')}</p>
             <dl className="mt-8 divide-y divide-mist border-y border-mist">
               {specs.map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-6 py-3 text-[15px]">

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
 import { useT } from '../i18n'
-import { APPLICATIONS } from '../config'
+import { APPLICATIONS, COLLECTIONS } from '../config'
 import { usePublicStones } from '../store/stones'
 import { createQuote } from '../services/api'
 
-const empty = { name: '', phone: '', email: '', application: 'mutfak', stone: '', size: '', message: '' }
+const empty = { name: '', phone: '', email: '', application: 'tezgah', stone: '', size: '', message: '' }
 
 export default function QuoteForm({ defaultStone = '' }) {
   const t = useT()
@@ -59,7 +59,11 @@ export default function QuoteForm({ defaultStone = '' }) {
         <label htmlFor="q-stone" className="field-label">{t('form.stone')}</label>
         <select id="q-stone" className="field" value={f.stone} onChange={set('stone')}>
           <option value="">{t('form.stoneAny')}</option>
-          {stones.map((s) => <option key={s.slug} value={s.slug}>{s.name} ({t(`mat.${s.material}`)})</option>)}
+          {COLLECTIONS.map(({ key }) => (
+            <optgroup key={key} label={t(`col.${key}`)}>
+              {stones.filter((s) => s.collection === key).map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+            </optgroup>
+          ))}
         </select>
       </div>
       <div>

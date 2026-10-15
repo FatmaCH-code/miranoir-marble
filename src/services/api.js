@@ -12,14 +12,14 @@ const fail = (error, fallback) => { throw new Error(error?.message || fallback) 
 
 // ---------- row <-> object ----------
 const stoneFromRow = (r) => ({
-  id: r.id, slug: r.slug, name: r.name, material: r.material, brand: r.brand || '',
+  id: r.id, slug: r.slug, name: r.name, collection: r.collection || '', material: r.material, brand: r.brand || '',
   tone: r.tone || 'light', finish: r.finish || '', thickness: r.thickness || '',
   description: { tr: r.description_tr || '', en: r.description_en || '' },
   images: r.images || [], featured: !!r.featured, active: !!r.active,
 })
 const stoneToRow = (s) => ({
-  slug: s.slug.trim(), name: s.name.trim(), material: s.material, brand: s.brand.trim(),
-  tone: s.tone, finish: s.finish.trim(), thickness: s.thickness.trim(),
+  slug: s.slug.trim(), name: s.name.trim(), collection: s.collection, material: s.material, brand: (s.brand || '').trim(),
+  tone: s.tone || 'light', finish: (s.finish || '').trim(), thickness: (s.thickness || '').trim(),
   description_tr: s.description.tr, description_en: s.description.en,
   images: s.images, featured: !!s.featured, active: s.active !== false,
 })
@@ -29,7 +29,7 @@ const quoteFromRow = (r) => ({
 })
 
 // ---------- local demo storage ----------
-const LS = { stones: 'miranoir-stones', quotes: 'miranoir-quotes', admin: 'miranoir-admin' }
+const LS = { stones: 'miranoir-stones-v2', quotes: 'miranoir-quotes', admin: 'miranoir-admin' }
 const readLS = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d } catch { return d } }
 const writeLS = (k, v) => {
   try { localStorage.setItem(k, JSON.stringify(v)) }

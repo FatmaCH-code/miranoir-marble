@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useT } from '../i18n'
-import { MATERIALS, BRANDS } from '../config'
+import { COLLECTIONS, BRANDS, APPLICATIONS, AREA_IMAGES } from '../config'
 import { usePublicStones } from '../store/stones'
 import StoneCard from '../components/StoneCard'
 import Process from '../components/Process'
@@ -18,8 +18,8 @@ function Hero() {
   }
   return (
     <section ref={ref} onPointerMove={onMove} className="relative overflow-hidden bg-slab text-stone">
-      <img src="/brand/hero-nero.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-r from-slab/85 via-slab/40 to-slab/10" />
+      <img src="/projects2/kitchen-belvedere.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slab/90 via-slab/60 to-slab/20" />
       <div className="hero-sheen absolute inset-0" />
       <div className="page relative grid min-h-[min(86vh,780px)] items-center gap-10 py-16 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="hero-in max-w-xl">
@@ -40,8 +40,8 @@ function Hero() {
 function Panels() {
   const t = useT()
   const items = [
-    { img: '/projects/k1.jpg', title: t('home.counters.title'), body: t('home.counters.body'), cta: t('nav.quote'), to: '/iletisim' },
-    { img: '/projects/b2.jpg', title: t('home.apps.title'), body: t('home.apps.body'), cta: t('home.apps.cta'), to: '/uygulamalar' },
+    { img: '/projects2/kitchen-arabescato.jpg', title: t('home.counters.title'), body: t('home.counters.body'), cta: t('home.apps.cta'), to: '/uygulamalar/tezgah' },
+    { img: '/projects2/living-onyx.jpg', title: t('home.apps.title'), body: t('home.apps.body'), cta: t('nav.allApps'), to: '/uygulamalar' },
   ]
   return (
     <section className="page grid gap-5 py-20 md:grid-cols-2">
@@ -56,6 +56,29 @@ function Panels() {
           </div>
         </Link>
       ))}
+    </section>
+  )
+}
+
+function Areas() {
+  const t = useT()
+  return (
+    <section className="page pb-20">
+      <h2 className="text-4xl">{t('home.areas.title')}</h2>
+      <p className="measure mt-3 text-noir/75">{t('home.areas.body')}</p>
+      <ul className="mt-10 grid gap-x-10 border-t border-mist sm:grid-cols-2">
+        {APPLICATIONS.map((a) => (
+          <li key={a} className="border-b border-mist">
+            <Link to={`/uygulamalar/${a}`} className="group flex items-center gap-5 py-4">
+              <img src={AREA_IMAGES[a]} alt="" loading="lazy" className="h-14 w-14 shrink-0 rounded-full object-cover" />
+              <span>
+                <span className="block font-display text-xl group-hover:text-verd">{t(`app.${a}`)}</span>
+                <span className="block text-sm text-vein">{t(`appd.${a}`)}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }
@@ -81,27 +104,22 @@ function Featured() {
   )
 }
 
-function Materials() {
+function Collections() {
   const t = useT()
   const { stones } = usePublicStones()
-  const cover = { mermer: 'calacatta-oro', granit: 'black-galaxy', kuvars: 'quartz-calacatta', porselen: 'porcelain-nero-venato' }
   return (
     <section className="bg-white py-20">
       <div className="page">
-        <h2 className="text-4xl">{t('home.browse.title')}</h2>
-        <p className="measure mt-3 text-noir/75">{t('home.browse.body')}</p>
-        <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
-          {MATERIALS.map((m) => {
-            const list = stones.filter((s) => s.material === m)
-            const img = (list.find((s) => s.slug === cover[m]) || list[0])?.images[0]
-            return (
-              <Link key={m} to={`/urunler/${m}`} className="group block">
-                <div className="slab aspect-[3/4] rounded-t-full">{img && <img src={img} alt="" loading="lazy" />}</div>
-                <h3 className="mt-4 font-display text-2xl group-hover:text-verd">{t(`mat.${m}`)}</h3>
-                <p className="text-sm text-vein">{t('home.count', { n: list.length })}</p>
-              </Link>
-            )
-          })}
+        <h2 className="text-4xl">{t('home.cols.title')}</h2>
+        <p className="measure mt-3 text-noir/75">{t('home.cols.body')}</p>
+        <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
+          {COLLECTIONS.map(({ key, cover }) => (
+            <Link key={key} to={`/urunler/${key}`} className="group block">
+              <div className="slab aspect-[3/4] rounded-t-full"><img src={cover} alt="" loading="lazy" /></div>
+              <h3 className="mt-4 font-display text-2xl group-hover:text-verd">{t(`col.${key}`)}</h3>
+              <p className="text-sm text-vein">{t('home.count', { n: stones.filter((s) => s.collection === key).length })}</p>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
@@ -110,7 +128,7 @@ function Materials() {
 
 function Brands() {
   const t = useT()
-  const all = [...BRANDS.kuvars, ...BRANDS.porselen]
+  const all = BRANDS
   return (
     <section className="border-y border-mist py-14">
       <div className="page">
@@ -129,8 +147,9 @@ export default function Home() {
     <>
       <Hero />
       <Panels />
+      <Areas />
       <Featured />
-      <Materials />
+      <Collections />
       <section className="page py-20">
         <h2 className="text-4xl">{t('home.process.title')}</h2>
         <p className="measure mt-3 mb-12 text-noir/75">{t('home.process.body')}</p>
