@@ -18,6 +18,22 @@ Admin: `/admin` → `admin@miranoir.com` / `miranoir123`
 - `src/data/seedStones.js` + `public/catalog/` — the 153 catalogue stones
 - `src/data/projects.js` + `public/projects2/` — project photos from the catalogue
 
+## Quote form → email
+Each quote request is emailed to `QUOTE_EMAIL.to` in `src/config.js` **and** saved
+(admin panel → Teklif talepleri, or the Supabase `quotes` table).
+- Default service is FormSubmit (free, no account). The very first request sends a
+  confirmation email to that address: open it and click **Activate Form** once.
+  Requests sent before activation are not emailed, but they are still in the admin panel.
+- Prefer Web3Forms? Get a free access key at web3forms.com with the same address,
+  paste it in `web3formsKey` and set `provider: 'web3forms'`.
+
+## Adding a brand's colours
+Every brand in `src/config.js` (Belenco, Çimstone, Quamond, NG, Kütahya, Bien, Neolith, Kale…)
+already has its own page. Until it has stones, the page shows a button that
+searches for "<brand> katalog" plus WhatsApp / quote buttons.
+To fill it: Admin → choose the brand in the filter → "Taş ekle" → name + photo.
+New stones are put in the selected brand automatically.
+
 ## Connect the Supabase database (project dnvsomnckiemvnqsbbdh)
 The project URL is already set in `.env.local`. You only need to add the key and create the tables.
 

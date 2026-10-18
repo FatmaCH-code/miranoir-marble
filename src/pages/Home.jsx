@@ -113,10 +113,10 @@ function Collections() {
         <h2 className="text-4xl">{t('home.cols.title')}</h2>
         <p className="measure mt-3 text-noir/75">{t('home.cols.body')}</p>
         <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
-          {COLLECTIONS.map(({ key, cover }) => (
+          {COLLECTIONS.filter((c) => c.cover).map(({ key, cover }) => (
             <Link key={key} to={`/urunler/${key}`} className="group block">
               <div className="slab aspect-[3/4] rounded-t-full"><img src={cover} alt="" loading="lazy" /></div>
-              <h3 className="mt-4 font-display text-2xl group-hover:text-verd">{t(`col.${key}`)}</h3>
+              <h3 className="mt-4 font-display text-2xl group-hover:text-verd">{t.col(key)}</h3>
               <p className="text-sm text-vein">{t('home.count', { n: stones.filter((s) => s.collection === key).length })}</p>
             </Link>
           ))}
@@ -128,13 +128,12 @@ function Collections() {
 
 function Brands() {
   const t = useT()
-  const all = BRANDS
   return (
     <section className="border-y border-mist py-14">
       <div className="page">
         <h2 className="text-center text-sm text-vein">{t('home.brands.title')}</h2>
         <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 font-display text-2xl text-noir/80">
-          {all.map((b) => <li key={b}>{b}</li>)}
+          {BRANDS.map((c) => <li key={c.key}><Link to={`/urunler/${c.key}`} className="hover:text-verd">{c.brand}</Link></li>)}
         </ul>
       </div>
     </section>

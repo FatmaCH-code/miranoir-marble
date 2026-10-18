@@ -3,7 +3,29 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import Brand from './Brand'
 import { useT, useLang } from '../i18n'
-import { COLLECTIONS, APPLICATIONS } from '../config'
+import { COLLECTIONS, GROUPS, APPLICATIONS } from '../config'
+
+function CollectionsMenu({ label }) {
+  const t = useT()
+  return (
+    <div className="group relative">
+      <NavLink to="/urunler" className={({ isActive }) => `flex items-center gap-1 py-7 hover:text-verd ${isActive ? 'text-verd' : ''}`}>
+        {label}<ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+      </NavLink>
+      <div className="invisible absolute left-1/2 top-full z-30 grid w-[640px] -translate-x-1/2 grid-cols-3 gap-4 rounded-xl border border-mist bg-white p-5 opacity-0 shadow-[0_18px_40px_-20px_rgba(30,36,36,0.45)] transition-all group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+        {GROUPS.map((g) => (
+          <div key={g}>
+            <p className="mb-2 px-3 text-sm text-vein">{t(`grp.${g}`)}</p>
+            {COLLECTIONS.filter((c) => c.group === g).map(({ key }) => (
+              <Link key={key} to={`/urunler/${key}`} className="block rounded-lg px-3 py-1.5 text-[15px] hover:bg-stone">{t.col(key)}</Link>
+            ))}
+          </div>
+        ))}
+        <Link to="/urunler" className="col-span-3 border-t border-mist px-3 pt-3 text-[15px] text-verd hover:underline">{t('nav.allProducts')}</Link>
+      </div>
+    </div>
+  )
+}
 
 function Dropdown({ label, to, items }) {
   return (
@@ -27,7 +49,6 @@ export default function Navbar() {
   const { pathname } = useLocation()
   useEffect(() => setOpen(false), [pathname])
 
-  const productItems = [{ to: '/urunler', label: t('nav.allProducts') }, ...COLLECTIONS.map(({ key }) => ({ to: `/urunler/${key}`, label: t(`col.${key}`) }))]
   const appItems = [{ to: '/uygulamalar', label: t('nav.allApps') }, ...APPLICATIONS.map((a) => ({ to: `/uygulamalar/${a}`, label: t(`app.${a}`) }))]
   const simple = [['/hakkimizda', 'nav.about'], ['/blog', 'nav.blog'], ['/iletisim', 'nav.contact']]
   const langBtn = (
@@ -42,7 +63,7 @@ export default function Navbar() {
         <Brand />
         <nav className="hidden items-center gap-8 text-[15px] lg:flex" aria-label="Main">
           <NavLink to="/" end className={({ isActive }) => `py-7 hover:text-verd ${isActive ? 'text-verd' : ''}`}>{t('nav.home')}</NavLink>
-          <Dropdown label={t('nav.products')} to="/urunler" items={productItems} />
+          <CollectionsMenu label={t('nav.products')} />
           <Dropdown label={t('nav.applications')} to="/uygulamalar" items={appItems} />
           {simple.map(([to, k]) => (
             <NavLink key={to} to={to} className={({ isActive }) => `py-7 hover:text-verd ${isActive ? 'text-verd' : ''}`}>{t(k)}</NavLink>
@@ -66,9 +87,14 @@ export default function Navbar() {
             <Link to="/" className="block font-display text-2xl">{t('nav.home')}</Link>
             <div>
               <Link to="/urunler" className="block font-display text-2xl">{t('nav.products')}</Link>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {COLLECTIONS.map(({ key }) => <Link key={key} to={`/urunler/${key}`} className="chip">{t(`col.${key}`)}</Link>)}
-              </div>
+              {GROUPS.map((g) => (
+                <div key={g} className="mt-3">
+                  <p className="mb-1.5 text-sm text-vein">{t(`grp.${g}`)}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {COLLECTIONS.filter((c) => c.group === g).map(({ key }) => <Link key={key} to={`/urunler/${key}`} className="chip">{t.col(key)}</Link>)}
+                  </div>
+                </div>
+              ))}
             </div>
             <div>
               <Link to="/uygulamalar" className="block font-display text-2xl">{t('nav.applications')}</Link>

@@ -4,6 +4,7 @@ import { useT } from '../i18n'
 import { APPLICATIONS, COLLECTIONS } from '../config'
 import { usePublicStones } from '../store/stones'
 import { createQuote } from '../services/api'
+import { emailQuote } from '../services/notify'
 
 const empty = { name: '', phone: '', email: '', application: 'tezgah', stone: '', size: '', message: '' }
 
@@ -19,8 +20,13 @@ export default function QuoteForm({ defaultStone = '' }) {
     e.preventDefault()
     if (!f.name.trim() || !f.phone.trim()) { setError(t('form.required')); return }
     setError(''); setState('sending')
-    try { await createQuote(f); setState('sent') }
-    catch (err) { setError(err.message); setState('idle') }
+    // save it (admin panel / Supabase) and email it at the same time;
+    // the request counts as sent if at least one of the two worked
+    const stoneName = stones.find((s) => s.slug === f.stone)?.name || ''
+    const [saved, emailed] = await Promise.allSettled([createQuote(f), emailQuote(f, stoneName)])
+    if (emailed.status === 'rejected') console.warn('Quote email failed:', emailed.reason)
+    if (saved.status === 'fulfilled' || emailed.value === true) setState('sent')
+    else { setError(saved.reason?.message || t('form.failed')); setState('idle') }
   }
 
   if (state === 'sent') {
@@ -59,8 +65,8 @@ export default function QuoteForm({ defaultStone = '' }) {
         <label htmlFor="q-stone" className="field-label">{t('form.stone')}</label>
         <select id="q-stone" className="field" value={f.stone} onChange={set('stone')}>
           <option value="">{t('form.stoneAny')}</option>
-          {COLLECTIONS.map(({ key }) => (
-            <optgroup key={key} label={t(`col.${key}`)}>
+          {COLLECTIONS.filter(({ key }) => stones.some((s) => s.collection === key)).map(({ key }) => (
+            <optgroup key={key} label={t.col(key)}>
               {stones.filter((s) => s.collection === key).map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
             </optgroup>
           ))}

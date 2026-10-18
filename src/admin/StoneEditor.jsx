@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ArrowLeft, Upload, X } from 'lucide-react'
 import { useT } from '../i18n'
-import { COLLECTIONS, collectionOf } from '../config'
+import { COLLECTIONS, GROUPS, collectionOf } from '../config'
 import { saveStone, uploadStoneImage } from '../services/api'
 import { slugify } from '../lib/utils'
 
@@ -10,9 +10,13 @@ const blank = { name: '', slug: '', collection: 'beyaz', material: 'mermer', bra
 // defined outside the editor so inputs keep focus while typing
 const Field = ({ id, label, children }) => <div><label htmlFor={id} className="field-label">{label}</label>{children}</div>
 
-export default function StoneEditor({ stone, onDone }) {
+export default function StoneEditor({ stone, onDone, defaultCollection = '' }) {
   const t = useT()
-  const [s, setS] = useState(stone ? structuredClone(stone) : blank)
+  const [s, setS] = useState(() => {
+    if (stone) return structuredClone(stone)
+    const c = collectionOf(defaultCollection)
+    return c ? { ...blank, collection: c.key, material: c.material, brand: c.brand || '' } : blank
+  })
   const [slugTouched, setSlugTouched] = useState(!!stone)
   const [busy, setBusy] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -50,7 +54,11 @@ export default function StoneEditor({ stone, onDone }) {
         <Field id="e-col" label={t('stone.collection')}>
           <select id="e-col" className="field" value={s.collection}
             onChange={(e) => { const c = collectionOf(e.target.value); setS({ ...s, collection: c.key, material: c.material, brand: c.brand || s.brand }) }}>
-            {COLLECTIONS.map(({ key }) => <option key={key} value={key}>{t(`col.${key}`)}</option>)}
+            {GROUPS.map((g) => (
+              <optgroup key={g} label={t(`grp.${g}`)}>
+                {COLLECTIONS.filter((c) => c.group === g).map(({ key }) => <option key={key} value={key}>{t.col(key)}</option>)}
+              </optgroup>
+            ))}
           </select>
         </Field>
         <Field id="e-brand" label={t('stone.brand')}><input id="e-brand" className="field" value={s.brand} onChange={set('brand')} /></Field>

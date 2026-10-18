@@ -25,7 +25,7 @@ export default function StonePage() {
 
   const related = stones.filter((s) => s.id !== stone.id && s.collection === stone.collection).slice(0, 4)
   const specs = [
-    ['stone.collection', stone.collection ? t(`col.${stone.collection}`) : ''], ['stone.material', t(`mat.${stone.material}`)],
+    ['stone.collection', stone.collection ? t.col(stone.collection) : ''], ['stone.material', t(`mat.${stone.material}`)],
     ['stone.brand', stone.brand], ['stone.finish', stone.finish], ['stone.thickness', stone.thickness],
   ].filter(([, v]) => v)
 
@@ -52,9 +52,9 @@ export default function StonePage() {
             )}
           </div>
           <div className="lg:pt-6">
-            <p className="text-vein">{stone.collection ? t(`col.${stone.collection}`) : t(`mat.${stone.material}`)}</p>
+            <p className="text-vein">{stone.collection ? t.col(stone.collection) : t(`mat.${stone.material}`)}</p>
             <h1 className="mt-1 text-5xl">{stone.name}</h1>
-            <p className="measure mt-6 text-[17px] text-noir/80">{t.pick(stone.description) || (stone.collection ? t(`cold.${stone.collection}`) : '')}</p>
+            <p className="measure mt-6 text-[17px] text-noir/80">{t.pick(stone.description) || (stone.collection ? t.colDesc(stone.collection) : '')}</p>
             <dl className="mt-8 divide-y divide-mist border-y border-mist">
               {specs.map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-6 py-3 text-[15px]">

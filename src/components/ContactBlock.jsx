@@ -23,7 +23,7 @@ export function ContactDetails() {
         <a href={mapsLink} target="_blank" rel="noreferrer" className="link mt-1 inline-block">{t('contact.directions')}</a>
       </Row>
       <div className="flex gap-2 pl-14">
-        {[[whatsappHref(t('wa.text')), WhatsAppIcon, 'WhatsApp'], [COMPANY.social.instagram, Instagram, 'Instagram'], [COMPANY.social.facebook, Facebook, 'Facebook'], [COMPANY.social.pinterest, PinterestIcon, 'Pinterest']].map(([href, I, label]) => (
+        {[[whatsappHref(t('wa.text')), WhatsAppIcon, 'WhatsApp'], [COMPANY.social.instagram, Instagram, 'Instagram'], [COMPANY.social.facebook, Facebook, 'Facebook'], [COMPANY.social.pinterest, PinterestIcon, 'Pinterest']].filter(([href]) => href).map(([href, I, label]) => (
           <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} className="flex h-10 w-10 items-center justify-center rounded-full bg-noir text-stone hover:bg-verd"><I className="h-4 w-4" /></a>
         ))}
       </div>

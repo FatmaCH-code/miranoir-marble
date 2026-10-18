@@ -18,9 +18,9 @@ export default function TopBar() {
           </a>
         </div>
         <div className="flex items-center gap-1">
-          <a href={COMPANY.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="p-1.5 hover:text-white"><Instagram className="h-4 w-4" /></a>
-          <a href={COMPANY.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="p-1.5 hover:text-white"><Facebook className="h-4 w-4" /></a>
-          <a href={COMPANY.social.pinterest} target="_blank" rel="noreferrer" aria-label="Pinterest" className="p-1.5 hover:text-white"><PinterestIcon className="h-4 w-4" /></a>
+          {COMPANY.social.instagram && <a href={COMPANY.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="p-1.5 hover:text-white"><Instagram className="h-4 w-4" /></a>}
+          {COMPANY.social.facebook && <a href={COMPANY.social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="p-1.5 hover:text-white"><Facebook className="h-4 w-4" /></a>}
+          {COMPANY.social.pinterest && <a href={COMPANY.social.pinterest} target="_blank" rel="noreferrer" aria-label="Pinterest" className="p-1.5 hover:text-white"><PinterestIcon className="h-4 w-4" /></a>}
         </div>
       </div>
     </div>

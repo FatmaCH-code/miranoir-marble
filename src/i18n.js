@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { collectionOf } from './config'
 
 const dict = {
   tr: {
@@ -16,6 +17,11 @@ const dict = {
     'cold.anatolia': 'Anatolia porselen levha serisi. Doğal taş görünümü; ısıya ve çizilmeye dayanıklı yüzey.',
     'cold.lamar': 'Lamar porselen levha serisi. Geniş ve derzsiz uygulamalar için büyük formatlı yüzeyler.',
     'cold.coante': 'Coante kuvars serisi. Gözeneksiz, leke tutmayan ve bakımı kolay tezgâh yüzeyleri.',
+    'grp.dogal': 'Doğal taş', 'grp.kuvars': 'Kuvars markaları', 'grp.porselen': 'Porselen markaları',
+    'cold.brand.kuvars': '{brand} kuvars yüzeyleri. Gözeneksiz, leke tutmayan ve bakımı kolay tezgâh yüzeyleri.',
+    'cold.brand.porselen': '{brand} porselen levhalar. Isıya ve çizilmeye dayanıklı, büyük formatlı yüzeyler.',
+    'brand.catalog': '{brand} kataloğunu inceleyin', 'brand.empty': '{brand} renklerini yakında buraya ekleyeceğiz. Tüm renkler için markanın kataloğuna göz atın; beğendiğiniz rengi bize yazın, teklifinizi hazırlayalım.',
+    'brand.ask': 'Bu marka için teklif alın',
     'stone.collection': 'Koleksiyon', 'home.cols.title': 'Çağdaş yüzeylere yeni perspektifler',
     'home.cols.body': 'Kataloğumuzdaki tüm koleksiyonlar: doğal mermer ve granit, oniks, porselen ve kuvars.',
     'app.merdiven': 'Merdiven ve basamak', 'app.denizlik': 'Pencere denizlikleri', 'app.zemin': 'Zemin döşeme ve kaplama',
@@ -95,7 +101,7 @@ const dict = {
     'form.size': 'Yaklaşık ölçü', 'form.sizeHint': 'Örn. L mutfak, 3,2 m + 1,8 m',
     'form.message': 'Notunuz', 'form.send': 'Teklif iste', 'form.sending': 'Gönderiliyor…',
     'form.sent.t': 'Talebiniz alındı', 'form.sent.b': 'En kısa sürede {phone} numarası üzerinden size döneceğiz.',
-    'form.again': 'Yeni talep gönder', 'form.required': 'Ad ve telefon zorunludur.',
+    'form.again': 'Yeni talep gönder', 'form.required': 'Ad ve telefon zorunludur.', 'form.failed': 'Talebiniz gönderilemedi. Lütfen bizi telefonla veya WhatsApp üzerinden arayın.',
     'form.optional': 'isteğe bağlı',
 
     'footer.tagline': 'Estetik, ustalık ve kaliteyi yaşam alanlarınıza taşıyoruz.',
@@ -129,6 +135,11 @@ const dict = {
     'cold.anatolia': 'The Anatolia porcelain slab series. The look of natural stone, resistant to heat and scratches.',
     'cold.lamar': 'The Lamar porcelain slab series. Large-format surfaces for wide, seamless installations.',
     'cold.coante': 'The Coante quartz series. Non-porous, stain-resistant and easy-care worktop surfaces.',
+    'grp.dogal': 'Natural stone', 'grp.kuvars': 'Quartz brands', 'grp.porselen': 'Porcelain brands',
+    'cold.brand.kuvars': '{brand} quartz surfaces. Non-porous, stain-resistant and easy-care worktops.',
+    'cold.brand.porselen': '{brand} porcelain slabs. Large-format surfaces resistant to heat and scratches.',
+    'brand.catalog': 'See the {brand} catalogue', 'brand.empty': 'We will add the {brand} colours here soon. Browse the brand catalogue for every colour, then send us the one you like and we will prepare your quote.',
+    'brand.ask': 'Get a quote for this brand',
     'stone.collection': 'Collection', 'home.cols.title': 'A fresh outlook on surfaces',
     'home.cols.body': 'Every collection in our catalogue: natural marble and granite, onyx, porcelain and quartz.',
     'app.merdiven': 'Stairs and steps', 'app.denizlik': 'Window sills', 'app.zemin': 'Flooring',
@@ -208,7 +219,7 @@ const dict = {
     'form.size': 'Approximate size', 'form.sizeHint': 'e.g. L-shaped kitchen, 3.2 m + 1.8 m',
     'form.message': 'Notes', 'form.send': 'Request a quote', 'form.sending': 'Sending…',
     'form.sent.t': 'Request received', 'form.sent.b': 'We will call you back on {phone} as soon as possible.',
-    'form.again': 'Send another request', 'form.required': 'Name and phone are required.',
+    'form.again': 'Send another request', 'form.required': 'Name and phone are required.', 'form.failed': 'Your request could not be sent. Please call us or message us on WhatsApp.',
     'form.optional': 'optional',
 
     'footer.tagline': 'We bring aesthetics, craftsmanship and quality into your living spaces.',
@@ -245,6 +256,9 @@ export const useLang = create((set) => ({
 }))
 
 // t('key', { n: 3 }) → translated string with {placeholders} filled in
+// Turkish text outside React (used for the quote email, which is always in Turkish)
+export const trText = (key) => dict.tr[key] ?? key
+
 export function useT() {
   const lang = useLang((s) => s.lang)
   const t = (key, vars) => {
@@ -255,5 +269,12 @@ export function useT() {
   // pick the right language from a { tr, en } object
   t.pick = (obj) => (obj && typeof obj === 'object' ? obj[lang] || obj.tr || '' : obj || '')
   t.lang = lang
+  // collection name / description (brand collections fall back to the brand name)
+  t.col = (key) => dict[lang][`col.${key}`] ?? collectionOf(key)?.brand ?? key
+  t.colDesc = (key) => {
+    if (dict[lang][`cold.${key}`]) return dict[lang][`cold.${key}`]
+    const c = collectionOf(key)
+    return c?.brand ? t(`cold.brand.${c.material}`, { brand: c.brand }) : ''
+  }
   return t
 }
